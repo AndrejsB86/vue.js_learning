@@ -37,13 +37,6 @@ public class MessageController {
         return getMessage(id);
     }
 
-    private Map<String, String> getMessage(String id) {
-        return messages.stream()
-                .filter(message -> message.get("id").equals(id))
-                .findFirst()
-                .orElseThrow(NotFoundException::new);
-    }
-
     @PostMapping
     public Map<String, String> create(@RequestBody Map<String, String> message) {
         message.put("id", String.valueOf(counter++));
@@ -62,9 +55,16 @@ public class MessageController {
     }
 
     @DeleteMapping("{id}")
-    public void delete(@PathVariable String id){
+    public void delete(@PathVariable String id) {
         Map<String, String> message = getMessage(id);
-
         messages.remove(message);
     }
+
+    private Map<String, String> getMessage(String id) {
+        return messages.stream()
+                .filter(message -> message.get("id").equals(id))
+                .findFirst()
+                .orElseThrow(NotFoundException::new);
+    }
+
 }
